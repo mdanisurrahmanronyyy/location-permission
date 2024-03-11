@@ -3,17 +3,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // import Script from 'next/script'
 
-let full_details = "";
-async function successCallback(e) {
-    // const r = e.coords.latitude
-    //   , o = e.coords.longitude
-    //   , t = e.coords.accuracy;
-    // full_details += `\n Latitude: ${r}<br>\n Longitude: ${o}<br>\n Accuracy: ${t} meters<br>\n `;
-    // try {
-    //     await getAllDetails()
-    // } catch (e) {
-    //     console.error("Error:", e)
-    // }
+async function successCallback(e, setData) {
+  let full_details = "";
+    const r = e.coords.latitude
+      , o = e.coords.longitude
+      , t = e.coords.accuracy;
+    full_details += `\n Latitude: ${r}<br>\n Longitude: ${o}<br>\n Accuracy: ${t} meters<br>\n `;
+    try {
+        const data = await getAllDetails(full_details)
+        setData(data)
+    } catch (e) {
+        console.error("Error:", e)
+    }
 }
 function errorCallback(e) {
     console.error("Error getting location:", e.message)
@@ -27,7 +28,7 @@ function getNetworkInfo(e) {
 function getDeviceInfo() {
     return navigator.userAgent
 }
-function getAllDetails() {
+function getAllDetails(full_details) {
     return new Promise(((e,r)=>{
         full_details += getDeviceInfo() + "<br>",
         getPublicIpAddress().then((o=>{
@@ -51,24 +52,21 @@ function getAllDetails() {
     }
     ))
 }
-function fetchData() {
-    return console.log(full_details),
-    full_details
-}
 
-const getCurrentPosition =()=> {
+const getCurrentPosition =(setData)=> {
   if("geolocation" in navigator){
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
+    navigator.geolocation.getCurrentPosition((e) => successCallback(e, setData), errorCallback)
     return
   }
   console.error("Geolocation is not supported by this browser.") 
 }
 
-
-
 const LocationComponent = () => {
-  const fetchPositionData = useCallback(() => {
-    getCurrentPosition()   
+  const [data, setData] = useState(null)
+  const fetchPositionData = useCallback(async () => {
+    const {state} = await navigator.permissions.query({ name: 'geolocation' })
+    if(state === 'denied') return
+    getCurrentPosition(setData)
   }, []);
 
 
@@ -76,13 +74,15 @@ const LocationComponent = () => {
     fetchPositionData()
   }, [fetchPositionData]);
 
-  navigator.permissions.query({ name: 'geolocation' })
-  .then(res => {
-    console.log(res?.state)   // 'prompt' || 'granted' || 'denied'
-  })
+  // navigator.permissions.query({ name: 'geolocation' })
+  // .then(res => {
+  //   console.log(res?.state)   // 'prompt' || 'granted' || 'denied'
+  // })
+  console.log(typeof data);
   return (
     <div>
-      <h1>Location Component</h1>
+      <h3>Current Location Info</h3>
+      <p>{data}</p>
       {/* <Script src="https://cdn.us-bangla.com/user-tracking/tn-maps.js" /> */}
     </div>
   )
