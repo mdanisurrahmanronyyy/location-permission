@@ -1,9 +1,9 @@
-import React from 'react'
+import LocationComponent from './LocationComponent'
 
 const page = () => {
   return (
     <div>
-      <h1>Hi</h1>      
+      <LocationComponent />      
     </div>
   )
 }
