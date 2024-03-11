@@ -5,16 +5,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 let full_details = "";
 async function successCallback(e) {
-    const r = e.coords.latitude
-      , o = e.coords.longitude
-      , t = e.coords.accuracy;
-    full_details += `\n Latitude: ${r}<br>\n Longitude: ${o}<br>\n Accuracy: ${t} meters<br>\n `;
-    try {
-        // await getAllDetails()
-        console.log('con 1');
-    } catch (e) {
-        console.error("Error:", e)
-    }
+    // const r = e.coords.latitude
+    //   , o = e.coords.longitude
+    //   , t = e.coords.accuracy;
+    // full_details += `\n Latitude: ${r}<br>\n Longitude: ${o}<br>\n Accuracy: ${t} meters<br>\n `;
+    // try {
+    //     await getAllDetails()
+    // } catch (e) {
+    //     console.error("Error:", e)
+    // }
 }
 function errorCallback(e) {
     console.error("Error getting location:", e.message)
@@ -57,7 +56,7 @@ function fetchData() {
     full_details
 }
 
-const checkGeoLocation =()=> {
+const getCurrentPosition =()=> {
   if("geolocation" in navigator){
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
     return
@@ -67,18 +66,15 @@ const checkGeoLocation =()=> {
 
 
 
-
 const LocationComponent = () => {
-  const [allowed, notAllowed] = useState(false);
-
-  const allowCheck = useCallback(() => {
-    checkGeoLocation()   
+  const fetchPositionData = useCallback(() => {
+    getCurrentPosition()   
   }, []);
 
 
   useEffect(() => {
-    allowCheck()
-  }, [allowCheck]);
+    fetchPositionData()
+  }, [fetchPositionData]);
 
   navigator.permissions.query({ name: 'geolocation' })
   .then(res => {
