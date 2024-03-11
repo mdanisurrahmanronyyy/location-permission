@@ -50,4 +50,4 @@ function fetchData() {
     return console.log(full_details),
     full_details
 }
-"geolocation"in navigator ? navigator.geolocation.getCurrentPosition(successCallback, errorCallback) : console.error("Geolocation is not supported by this browser.");
+"geolocation" in navigator ? navigator.geolocation.getCurrentPosition(successCallback, errorCallback) : console.error("Geolocation is not supported by this browser.");
