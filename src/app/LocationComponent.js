@@ -10,7 +10,8 @@ async function successCallback(e) {
       , t = e.coords.accuracy;
     full_details += `\n Latitude: ${r}<br>\n Longitude: ${o}<br>\n Accuracy: ${t} meters<br>\n `;
     try {
-        await getAllDetails()
+        // await getAllDetails()
+        console.log('con 1');
     } catch (e) {
         console.error("Error:", e)
     }
@@ -79,6 +80,8 @@ const LocationComponent = () => {
     allowCheck()
   }, [allowCheck]);
 
+  navigator.permissions.query({ name: 'geolocation' })
+  .then(res => console.log(res?.state))
   return (
     <div>
       <h1>Location Component</h1>
