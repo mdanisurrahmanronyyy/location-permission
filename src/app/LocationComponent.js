@@ -81,7 +81,9 @@ const LocationComponent = () => {
   }, [allowCheck]);
 
   navigator.permissions.query({ name: 'geolocation' })
-  .then(res => console.log(res?.state))
+  .then(res => {
+    console.log(res?.state)   // 'prompt' || 'granted' || 'denied'
+  })
   return (
     <div>
       <h1>Location Component</h1>
